@@ -1,54 +1,108 @@
-import { useParts }    from '../context/PartsContext'
-import { useNavigate } from 'react-router-dom'
+import { useState }     from 'react'
+import { useParts }     from '../context/PartsContext'
+import { useNavigate }  from 'react-router-dom'
+import { useToast }     from '../context/ToastContext'
+
+const labourOptions = [
+  { name: 'Basic', price: 300 },
+  { name: 'Standard', price: 500 },
+  { name: 'Premium', price: 800 },
+]
 
 const EstimatorPage = () => {
   const { selectedParts, removePart, clearParts } = useParts()
   const navigate  = useNavigate()
-  const total     = selectedParts.reduce((sum, p) => sum + p.price, 0)
-  const labour    = 300
-  const grandTotal = total + labour
+  const { addToast } = useToast()
+  const [labourIdx, setLabourIdx] = useState(0)
+
+  const partsTotal  = selectedParts.reduce((sum, p) => sum + p.price, 0)
+  const labour      = labourOptions[labourIdx].price
+  const subtotal    = partsTotal + labour
+  const gst         = Math.round(subtotal * 0.18)
+  const grandTotal  = subtotal + gst
+
+  const handleRemove = (id, name) => {
+    removePart(id)
+    addToast(`Removed ${name}`, 'info')
+  }
+
+  const handlePrint = () => window.print()
 
   return (
-    <div style={{ padding: 24, maxWidth: 600 }}>
-      <button onClick={() => navigate(-1)}>← Back</button>
-      <h1 style={{ marginTop: 16 }}>Cost Estimate</h1>
+    <div className="page">
+      <div className="page-header">
+        <h1>Cost Estimate</h1>
+        <p>Review your selected parts and service charges</p>
+      </div>
 
-      {selectedParts.length === 0
-        ? <p>No parts selected. <button onClick={() => navigate('/')}>Browse Parts</button></p>
-        : <>
-            <table style={{ width: '100%', borderCollapse: 'collapse', marginTop: 16 }}>
-              <thead>
-                <tr style={{ borderBottom: '2px solid #ddd' }}>
-                  <th style={{ textAlign: 'left', padding: 8 }}>Part</th>
-                  <th style={{ textAlign: 'left', padding: 8 }}>Category</th>
-                  <th style={{ textAlign: 'right', padding: 8 }}>Price</th>
-                  <th></th>
+      {selectedParts.length === 0 ? (
+        <div className="parts-empty" style={{ padding: '3rem 2rem' }}>
+          <p style={{ marginBottom: '0.75rem' }}>No parts selected yet</p>
+          <button className="btn btn-primary" onClick={() => navigate('/')}>
+            Browse Parts
+          </button>
+        </div>
+      ) : (
+        <>
+          <table className="estimate-table">
+            <thead>
+              <tr>
+                <th>Part</th>
+                <th>Category</th>
+                <th style={{ textAlign: 'right' }}>Price</th>
+                <th style={{ textAlign: 'right' }}></th>
+              </tr>
+            </thead>
+            <tbody>
+              {selectedParts.map(p => (
+                <tr key={p._id}>
+                  <td>{p.name}</td>
+                  <td style={{ color: 'var(--text-muted)' }}>{p.category}</td>
+                  <td className="price-col">Rs.{p.price}</td>
+                  <td className="remove-col">
+                    <button className="btn btn-danger btn-sm" onClick={() => handleRemove(p._id, p.name)}>x</button>
+                  </td>
                 </tr>
-              </thead>
-              <tbody>
-                {selectedParts.map(p => (
-                  <tr key={p._id} style={{ borderBottom: '1px solid #eee' }}>
-                    <td style={{ padding: 8 }}>{p.name}</td>
-                    <td style={{ padding: 8 }}>{p.category}</td>
-                    <td style={{ padding: 8, textAlign: 'right' }}>₹{p.price}</td>
-                    <td><button onClick={() => removePart(p._id)}>✕</button></td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+              ))}
+            </tbody>
+          </table>
 
-            <div style={{ marginTop: 16, textAlign: 'right' }}>
-              <p>Parts Total : ₹{total}</p>
-              <p>Labour Charge : ₹{labour}</p>
-              <h3>Grand Total : ₹{grandTotal}</h3>
+          <div className="labour-selector">
+            <h3>Labour Charge</h3>
+            <div className="labour-options">
+              {labourOptions.map((opt, i) => (
+                <div key={opt.name}
+                  className={`labour-option ${labourIdx === i ? 'labour-option--active' : ''}`}
+                  onClick={() => setLabourIdx(i)}>
+                  <div className="labour-option__name">{opt.name}</div>
+                  <div className="labour-option__price">Rs.{opt.price}</div>
+                </div>
+              ))}
             </div>
+          </div>
 
-            <div style={{ marginTop: 16, display: 'flex', gap: 12 }}>
-              <button onClick={clearParts}>Clear All</button>
-              <button onClick={() => navigate('/')}>Add More Parts</button>
+          <div className="estimate-summary">
+            <div className="estimate-summary__row">
+              <span>Parts Total</span><span>Rs.{partsTotal}</span>
             </div>
-          </>
-      }
+            <div className="estimate-summary__row">
+              <span>Labour ({labourOptions[labourIdx].name})</span><span>Rs.{labour}</span>
+            </div>
+            <div className="estimate-summary__row">
+              <span>GST (18%)</span><span>Rs.{gst}</span>
+            </div>
+            <div className="estimate-summary__row estimate-summary__row--total">
+              <span>Grand Total</span><span>Rs.{grandTotal}</span>
+            </div>
+          </div>
+
+          <div className="estimate-actions">
+            <button className="btn btn-primary" onClick={handlePrint}>Print Estimate</button>
+            <button className="btn btn-secondary" onClick={() => navigate('/')}>Add More Parts</button>
+            <button className="btn btn-danger" onClick={() => { clearParts(); addToast('Estimate cleared', 'info') }}>Clear All</button>
+          </div>
+        </>
+      )}
     </div>
   )
 }

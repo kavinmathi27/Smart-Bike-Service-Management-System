@@ -9,19 +9,26 @@ const CostEstimator = () => {
   if (selectedParts.length === 0) return null
 
   return (
-    <div style={{ position: 'fixed', bottom: 20, right: 20, background: '#fff',
-      border: '1px solid #ddd', borderRadius: 10, padding: 16, minWidth: 240, boxShadow: '0 2px 12px rgba(0,0,0,0.15)' }}>
+    <div className="float-cart">
       <h4>Estimate Cart</h4>
       {selectedParts.map(p => (
-        <div key={p._id} style={{ display: 'flex', justifyContent: 'space-between', marginTop: 6 }}>
+        <div key={p._id} className="float-cart__item">
           <span>{p.name}</span>
-          <span>₹{p.price} <button onClick={() => removePart(p._id)}>✕</button></span>
+          <span>
+            Rs.{p.price}
+            <button className="btn btn-danger btn-sm"
+              style={{ marginLeft: 6, padding: '0.15rem 0.4rem', fontSize: '0.7rem' }}
+              onClick={() => removePart(p._id)}>x</button>
+          </span>
         </div>
       ))}
-      <hr />
-      <strong>Total: ₹{total}</strong>
-      <br />
-      <button style={{ marginTop: 10, width: '100%' }} onClick={() => navigate('/estimate')}>
+      <div className="float-cart__divider" />
+      <div className="float-cart__total">
+        <span>Total</span>
+        <span style={{ color: 'var(--accent-light)' }}>Rs.{total}</span>
+      </div>
+      <button className="btn btn-primary" style={{ width: '100%', justifyContent: 'center', marginTop: '0.4rem' }}
+        onClick={() => navigate('/estimate')}>
         View Full Estimate
       </button>
     </div>
