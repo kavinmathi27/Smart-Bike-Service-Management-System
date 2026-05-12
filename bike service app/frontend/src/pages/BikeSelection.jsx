@@ -40,7 +40,7 @@ const BikeSelection = () => {
     e.preventDefault();
     try {
       // Save bike to backend to get an _id for tracking
-      const response = await axios.post('http://localhost:5000/api/bikes', formData);
+      const response = await axios.post('/api/bikes', formData);
       const savedBike = response.data;
       
       setBike(savedBike);

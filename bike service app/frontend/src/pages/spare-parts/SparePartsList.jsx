@@ -17,7 +17,7 @@ const SparePartsList = () => {
     try {
       setLoading(true);
       const { brand, model } = filter;
-      const response = await axios.get(`http://localhost:5000/api/spare-parts?brand=${brand}&model=${model}`);
+      const response = await axios.get('/api/spare-parts', { params: { brand, model } });
       setParts(response.data);
     } catch (error) {
       console.error('Error fetching parts:', error);

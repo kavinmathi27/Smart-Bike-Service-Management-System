@@ -30,6 +30,10 @@ mongoose
     console.log('Ensure you have replaced <db_password> in the .env file with the actual password.');
   });
 
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
-});
+if (process.env.NODE_ENV !== 'production') {
+  app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
+  });
+}
+
+module.exports = app;

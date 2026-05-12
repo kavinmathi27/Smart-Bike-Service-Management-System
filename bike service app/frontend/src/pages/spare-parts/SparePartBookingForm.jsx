@@ -52,7 +52,7 @@ const SparePartBookingForm = () => {
           phone: formData.phone,
         }
       };
-      await axios.post('http://localhost:5000/api/spare-part-bookings', bookingData);
+      await axios.post('/api/spare-part-bookings', bookingData);
       navigate('/dashboard'); // or a success page
     } catch (error) {
       console.error('Error creating booking:', error);

@@ -15,8 +15,8 @@ const AdminDashboard = () => {
     try {
       setLoading(true);
       const [serviceRes, partRes] = await Promise.all([
-        axios.get('http://localhost:5000/api/bookings'),
-        axios.get('http://localhost:5000/api/spare-part-bookings')
+        axios.get('/api/bookings'),
+        axios.get('/api/spare-part-bookings')
       ]);
       setBookings(serviceRes.data);
       setPartBookings(partRes.data);
@@ -33,7 +33,7 @@ const AdminDashboard = () => {
 
   const updateStatus = async (id, newStatus) => {
     try {
-      await axios.patch(`http://localhost:5000/api/bookings/${id}/status`, { status: newStatus });
+      await axios.patch(`/api/bookings/${id}/status`, { status: newStatus });
       setBookings(bookings.map(b => b._id === id ? { ...b, status: newStatus } : b));
     } catch (err) {
       alert('Failed to update status');
@@ -42,7 +42,7 @@ const AdminDashboard = () => {
 
   const updatePartStatus = async (id, newStatus) => {
     try {
-      await axios.patch(`http://localhost:5000/api/spare-part-bookings/${id}/status`, { status: newStatus });
+      await axios.patch(`/api/spare-part-bookings/${id}/status`, { status: newStatus });
       setPartBookings(partBookings.map(b => b._id === id ? { ...b, status: newStatus } : b));
     } catch (err) {
       alert('Failed to update part status');
@@ -51,7 +51,7 @@ const AdminDashboard = () => {
 
   const updateTechnician = async (id, name, phone) => {
     try {
-      await axios.patch(`http://localhost:5000/api/bookings/${id}/technician`, { technician: { name, phone } });
+      await axios.patch(`/api/bookings/${id}/technician`, { technician: { name, phone } });
       setBookings(bookings.map(b => b._id === id ? { ...b, technician: { name, phone } } : b));
     } catch (err) {
       console.error('Failed to update technician');

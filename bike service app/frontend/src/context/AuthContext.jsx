@@ -9,6 +9,9 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
+  // Set API base URL
+  axios.defaults.baseURL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+
   useEffect(() => {
     const savedUser = localStorage.getItem('motocare_user');
     const token = localStorage.getItem('motocare_token');
@@ -20,7 +23,7 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   const login = async (email, password) => {
-    const response = await axios.post('http://localhost:5000/api/auth/login', { email, password });
+    const response = await axios.post('/api/auth/login', { email, password });
     const { token, user: userData } = response.data;
     
     localStorage.setItem('motocare_token', token);
@@ -31,7 +34,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   const register = async (name, email, password, role = 'user') => {
-    const response = await axios.post('http://localhost:5000/api/auth/register', { name, email, password, role });
+    const response = await axios.post('/api/auth/register', { name, email, password, role });
     const { token, user: userData } = response.data;
     
     localStorage.setItem('motocare_token', token);
@@ -42,7 +45,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   const updateProfile = async (data) => {
-    const response = await axios.patch('http://localhost:5000/api/auth/profile', data);
+    const response = await axios.patch('/api/auth/profile', data);
     const userData = response.data;
     localStorage.setItem('motocare_user', JSON.stringify(userData));
     setUser(userData);

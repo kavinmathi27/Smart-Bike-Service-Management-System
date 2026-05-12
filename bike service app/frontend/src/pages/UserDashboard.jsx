@@ -18,8 +18,8 @@ const UserDashboard = () => {
       try {
         setLoading(true);
         const [serviceRes, partRes] = await Promise.all([
-          bike?._id ? axios.get(`http://localhost:5000/api/bookings/bike/${bike._id}`) : Promise.resolve({ data: [] }),
-          axios.get('http://localhost:5000/api/spare-part-bookings/user')
+          bike?._id ? axios.get(`/api/bookings/bike/${bike._id}`) : Promise.resolve({ data: [] }),
+          axios.get('/api/spare-part-bookings/user')
         ]);
         setBookings(serviceRes.data);
         setPartBookings(partRes.data);

@@ -39,7 +39,7 @@ const BookingConfirmation = () => {
         cost
       };
 
-      const bookingResponse = await axios.post('http://localhost:5000/api/bookings', bookingData);
+      const bookingResponse = await axios.post('/api/bookings', bookingData);
       
       setBookingId(bookingResponse.data._id.slice(-6).toUpperCase());
       setBookingStatus('success');
