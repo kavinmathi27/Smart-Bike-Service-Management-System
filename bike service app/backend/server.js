@@ -5,6 +5,8 @@ require('dotenv').config();
 
 const apiRoutes = require('./routes/apiRoutes');
 const authRoutes = require('./routes/authRoutes');
+const sparePartRoutes = require('./spare-parts/routes/sparePartRoutes');
+const sparePartBookingRoutes = require('./spare-parts/routes/sparePartBookingRoutes');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -16,6 +18,8 @@ app.use(express.json());
 // Routes
 app.use('/api', apiRoutes);
 app.use('/api/auth', authRoutes);
+app.use('/api/spare-parts', sparePartRoutes);
+app.use('/api/spare-part-bookings', sparePartBookingRoutes);
 
 // Database Connection
 mongoose

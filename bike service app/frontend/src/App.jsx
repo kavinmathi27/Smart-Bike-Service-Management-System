@@ -13,6 +13,8 @@ import UserDashboard from './pages/UserDashboard';
 import AdminDashboard from './pages/AdminDashboard';
 import Login from './pages/Login';
 import Profile from './pages/Profile';
+import SparePartsList from './pages/spare-parts/SparePartsList';
+import SparePartBookingForm from './pages/spare-parts/SparePartBookingForm';
 import { Navigate } from 'react-router-dom';
 
 const ProtectedRoute = ({ children, adminOnly = false }) => {
@@ -54,6 +56,8 @@ function App() {
                 <Route path="/emergency" element={<ProtectedRoute><EmergencyService /></ProtectedRoute>} />
                 <Route path="/general" element={<ProtectedRoute><GeneralService /></ProtectedRoute>} />
                 <Route path="/specific" element={<ProtectedRoute><SpecificRepair /></ProtectedRoute>} />
+                <Route path="/spare-parts" element={<ProtectedRoute><SparePartsList /></ProtectedRoute>} />
+                <Route path="/spare-parts/book/:id" element={<ProtectedRoute><SparePartBookingForm /></ProtectedRoute>} />
                 <Route path="/confirmation" element={<ProtectedRoute><BookingConfirmation /></ProtectedRoute>} />
               </Routes>
             </main>
