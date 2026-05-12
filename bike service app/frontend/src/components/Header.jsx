@@ -1,5 +1,5 @@
 import React from 'react';
-import { Moon, Sun, Wrench } from 'lucide-react';
+import { Moon, Sun, Wrench, Package } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 import { useBooking } from '../context/BookingContext';
@@ -33,6 +33,11 @@ const Header = ({ darkMode, setDarkMode }) => {
                     Dashboard
                   </Link>
                 )}
+                
+                <Link to="/spare-parts" className="flex items-center gap-1 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
+                  <Package size={16} />
+                  <span>Spare Parts</span>
+                </Link>
                 
                 <Link to="/profile" className="flex items-center gap-1 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
                   <UserIcon size={16} />
